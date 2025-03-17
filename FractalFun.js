@@ -1,16 +1,16 @@
 window.onload = function() {
-    const canvas = document.getElementById("mandelbrotCanvas1");
+    const canvas = document.getElementById("mandelbrotCanvas");
     if (!canvas) {
-        console.error("Canvas with ID 'mandelbrotCanvas1' not found!");
+        console.error("Canvas with ID 'mandelbrotCanvas' not found!");
         return;
     }
-
+    
     const ctx = canvas.getContext("2d");
     canvas.width = 800;
     canvas.height = 600;
 
     function drawMandelbrot() {
-        const maxIterations = 200;
+        const maxIterations = 150;
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const pixels = imgData.data;
 
@@ -28,9 +28,9 @@ window.onload = function() {
                 }
 
                 const color = iteration === maxIterations ? [0, 0, 0] : [
+                    (iteration % 8) * 32,
                     (iteration % 16) * 16,
-                    (iteration % 32) * 8,
-                    (iteration % 64) * 4
+                    (iteration % 32) * 8
                 ];
 
                 const index = (px + py * canvas.width) * 4;
