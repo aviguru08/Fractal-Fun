@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     setTimeout(() => {
         const canvas = document.getElementById("mandelbrotCanvas2");
         if (!canvas) {
-            console.error("Canvas with ID 'mandelbrotCanvas2' not found! Make sure it's in index.html.");
+            console.error("Canvas with ID 'mandelbrotCanvas2' not found!");
             return;
         }
 
@@ -11,14 +11,18 @@ document.addEventListener("DOMContentLoaded", function() {
         canvas.height = 600;
 
         function drawMandelbrot() {
-            const maxIterations = 250;
+            const maxIterations = 300; // Increased iterations for finer details
+            const zoom = 1.5; // Adjust zoom level to make it different
+            const offsetX = -0.7; // Shift left for a different focus
+            const offsetY = 0.3; // Shift up slightly
+
             const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const pixels = imgData.data;
 
             for (let px = 0; px < canvas.width; px++) {
                 for (let py = 0; py < canvas.height; py++) {
-                    let x0 = (px / canvas.width) * 3.5 - 2.5;
-                    let y0 = (py / canvas.height) * 2 - 1;
+                    let x0 = (px / canvas.width) * (3.5 / zoom) - (2.5 / zoom) + offsetX;
+                    let y0 = (py / canvas.height) * (2 / zoom) - (1 / zoom) + offsetY;
                     let x = 0, y = 0, iteration = 0;
 
                     while (x*x + y*y <= 4 && iteration < maxIterations) {
@@ -28,11 +32,14 @@ document.addEventListener("DOMContentLoaded", function() {
                         iteration++;
                     }
 
-                    const color = iteration === maxIterations ? [0, 0, 0] : [
-                        (iteration % 16) * 16,
-                        (iteration % 32) * 8,
-                        (iteration % 64) * 4
-                    ];
+                    // New color scheme for Mandelbrot Set 2
+                    const color = iteration === maxIterations 
+                        ? [0, 0, 0] // Black for the set
+                        : [
+                            (iteration % 16) * 10, 
+                            (iteration % 32) * 5, 
+                            (iteration % 64) * 3
+                        ];
 
                     const index = (px + py * canvas.width) * 4;
                     pixels[index] = color[0];
@@ -46,5 +53,5 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         drawMandelbrot();
-    }, 100); // Delay to ensure the canvas is loaded
+    }, 100);
 });
